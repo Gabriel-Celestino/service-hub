@@ -70,12 +70,14 @@ sf org open
 
 ```
 force-app/main/default/
+├── classes/             Apex: trigger framework, services, domain, selectors, tests
 ├── customMetadata/      SLA policies and routing rules (records)
 ├── objects/             Custom objects and fields on Account and Case
 ├── permissionsets/      Service_Hub_Agent
 ├── queues/              Support queues
 ├── settings/            Business Hours
-└── standardValueSets/   Case Status, Priority and Origin values
+├── standardValueSets/   Case Status, Priority and Origin values
+└── triggers/            One trigger per object
 config/                  Scratch org definition
 docs/                    Data model and ADRs
 ```
