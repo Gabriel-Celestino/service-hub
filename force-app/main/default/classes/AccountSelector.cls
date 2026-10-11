@@ -10,4 +10,15 @@ public inherited sharing class AccountSelector {
       [SELECT Id, Name, Support_Tier__c FROM Account WHERE Id IN :accountIds]
     );
   }
+
+  /** Accounts of the given cases. Cases without an account are skipped. */
+  public Map<Id, Account> selectByCases(List<Case> cases) {
+    Set<Id> accountIds = new Set<Id>();
+    for (Case record : cases) {
+      if (record.AccountId != null) {
+        accountIds.add(record.AccountId);
+      }
+    }
+    return selectByIds(accountIds);
+  }
 }

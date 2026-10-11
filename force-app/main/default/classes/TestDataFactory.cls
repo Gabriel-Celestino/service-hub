@@ -21,12 +21,16 @@ public class TestDataFactory {
   }
 
   public static Case buildCase(Id accountId, String category) {
+    return buildCase(accountId, category, 'Medium');
+  }
+
+  public static Case buildCase(Id accountId, String category, String priority) {
     sequence++;
     return new Case(
       AccountId = accountId,
       Category__c = category,
       Subject = 'Test case ' + sequence,
-      Priority = 'Medium',
+      Priority = priority,
       Status = 'New',
       Origin = 'Portal'
     );

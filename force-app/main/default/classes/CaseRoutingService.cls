@@ -9,8 +9,7 @@ public inherited sharing class CaseRoutingService {
       return;
     }
 
-    Map<Id, Account> accountsById = new AccountSelector()
-      .selectByIds(collectAccountIds(cases));
+    Map<Id, Account> accountsById = new AccountSelector().selectByCases(cases);
     CaseRouter router = new CaseRouter(
       new RoutingRuleSelector().selectAllOrdered()
     );
@@ -37,15 +36,5 @@ public inherited sharing class CaseRoutingService {
       }
       cases[i].OwnerId = queueId;
     }
-  }
-
-  private static Set<Id> collectAccountIds(List<Case> cases) {
-    Set<Id> accountIds = new Set<Id>();
-    for (Case record : cases) {
-      if (record.AccountId != null) {
-        accountIds.add(record.AccountId);
-      }
-    }
-    return accountIds;
   }
 }
