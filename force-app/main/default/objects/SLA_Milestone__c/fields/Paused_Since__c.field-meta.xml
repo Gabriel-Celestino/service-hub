@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Paused_Since__c</fullName>
+    <description
+  >Start of the current pause. Empty while the clock is running.</description>
+    <label>Paused Since</label>
+    <required>false</required>
+    <type>DateTime</type>
+</CustomField>

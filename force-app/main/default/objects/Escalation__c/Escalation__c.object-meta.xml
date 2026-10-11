@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description
+  >Audit trail of case escalations. One record per escalation; records are never overwritten.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <label>Escalation</label>
+    <nameField>
+        <displayFormat>ESC-{000000}</displayFormat>
+        <label>Escalation Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Escalations</pluralLabel>
+    <sharingModel>ControlledByParent</sharingModel>
+    <startsWith>Consonant</startsWith>
+    <visibility>Public</visibility>
+</CustomObject>

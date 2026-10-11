@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>First_Response_At__c</fullName>
+    <description
+  >When the case first left the New status. Set by the SLA engine.</description>
+    <inlineHelpText
+  >Set automatically when the case leaves the New status.</inlineHelpText>
+    <label>First Response At</label>
+    <required>false</required>
+    <type>DateTime</type>
+</CustomField>

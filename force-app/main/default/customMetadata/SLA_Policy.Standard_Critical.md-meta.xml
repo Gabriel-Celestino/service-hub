@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomMetadata
+  xmlns="http://soap.sforce.com/2006/04/metadata"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+>
+    <label>Standard - Critical</label>
+    <protected>false</protected>
+    <values>
+        <field>At_Risk_Percent__c</field>
+        <value xsi:type="xsd:double">75</value>
+    </values>
+    <values>
+        <field>Business_Hours_Name__c</field>
+        <value xsi:type="xsd:string">Default</value>
+    </values>
+    <values>
+        <field>First_Response_Minutes__c</field>
+        <value xsi:type="xsd:double">120</value>
+    </values>
+    <values>
+        <field>Priority__c</field>
+        <value xsi:type="xsd:string">Critical</value>
+    </values>
+    <values>
+        <field>Resolution_Minutes__c</field>
+        <value xsi:type="xsd:double">960</value>
+    </values>
+    <values>
+        <field>Support_Tier__c</field>
+        <value xsi:type="xsd:string">Standard</value>
+    </values>
+</CustomMetadata>

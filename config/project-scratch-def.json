@@ -1,0 +1,17 @@
+{
+  "orgName": "Service Hub",
+  "edition": "Developer",
+  "features": ["EnableSetPasswordInApi"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    }
+  },
+  "description": "Scratch org for Service Hub development and CI",
+  "hasSampleData": false,
+  "language": "en_US",
+  "country": "BR"
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Escalation_Level__c</fullName>
+    <defaultValue>0</defaultValue>
+    <description
+  >Current escalation level: 0 = none, 1 = SLA at risk, 2 = SLA breached.</description>
+    <inlineHelpText
+  >0 = not escalated, 1 = SLA at risk, 2 = SLA breached.</inlineHelpText>
+    <label>Escalation Level</label>
+    <precision>1</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <type>Number</type>
+</CustomField>
