@@ -31,14 +31,14 @@ flowchart LR
 
 ## Roadmap
 
-| Phase              | Scope                                                                                      | Status      |
-| ------------------ | ------------------------------------------------------------------------------------------ | ----------- |
-| 1. Foundation      | SFDX project, conventions, data model, ADRs                                                | Done        |
-| 2. Domain          | Data model metadata, trigger framework, routing, SLA and escalation engines, 90%+ coverage | In progress |
-| 3. Interface       | Agent console in LWC with Jest tests                                                       | Planned     |
-| 4. Integration     | Node.js + TypeScript portal, OAuth, Named Credentials, Platform Events                     | Planned     |
-| 5. DevOps          | GitHub Actions with scratch orgs, static analysis, coverage badges                         | Planned     |
-| 6. AI and showcase | AI case classification, final docs, demo video                                             | Planned     |
+| Phase              | Scope                                                                                      | Status  |
+| ------------------ | ------------------------------------------------------------------------------------------ | ------- |
+| 1. Foundation      | SFDX project, conventions, data model, ADRs                                                | Done    |
+| 2. Domain          | Data model metadata, trigger framework, routing, SLA and escalation engines, 90%+ coverage | Done    |
+| 3. Interface       | Agent console in LWC with Jest tests                                                       | Next    |
+| 4. Integration     | Node.js + TypeScript portal, OAuth, Named Credentials, Platform Events                     | Planned |
+| 5. DevOps          | GitHub Actions with scratch orgs, static analysis, coverage badges                         | Planned |
+| 6. AI and showcase | AI case classification, final docs, demo video                                             | Planned |
 
 ## Documentation
 
@@ -61,8 +61,9 @@ sf org login web --set-default-dev-hub --alias devhub
 sf org create scratch --definition-file config/project-scratch-def.json --alias service-hub --duration-days 30 --set-default
 sf project deploy start
 
-# 4. Grant access and open the org
+# 4. Grant access, schedule the escalation job and open the org
 sf org assign permset --name Service_Hub_Agent
+sf apex run --file scripts/apex/schedule-escalation.apex
 sf org open
 ```
 
@@ -78,6 +79,7 @@ force-app/main/default/
 ├── settings/            Business Hours
 ├── standardValueSets/   Case Status, Priority and Origin values
 └── triggers/            One trigger per object
+scripts/apex/            One-off Apex scripts (job scheduling)
 config/                  Scratch org definition
 docs/                    Data model and ADRs
 ```
