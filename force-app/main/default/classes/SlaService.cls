@@ -162,7 +162,7 @@ public inherited sharing class SlaService {
    * Case__c, a master-detail field that cannot be updated, so they are never
    * sent back to the database as they are.
    */
-  private static SLA_Milestone__c forUpdate(SLA_Milestone__c milestone) {
+  public static SLA_Milestone__c forUpdate(SLA_Milestone__c milestone) {
     return new SLA_Milestone__c(
       Id = milestone.Id,
       Status__c = milestone.Status__c,

@@ -10,5 +10,6 @@ Each significant design choice is recorded as an ADR: the context, the decision,
 | [0004](0004-sla-milestones-as-child-records.md)            | Store SLA deadlines as child records                                 | Accepted |
 | [0005](0005-platform-events-for-outbound-notifications.md) | Notify external systems through Platform Events                      | Accepted |
 | [0006](0006-layered-apex-architecture.md)                  | Use a layered Apex architecture with a lightweight trigger framework | Accepted |
+| [0007](0007-scheduled-batch-for-escalation.md)             | Escalate with a scheduled batch job instead of time-based automation | Accepted |
 
 New ADRs start from [the template](template.md).

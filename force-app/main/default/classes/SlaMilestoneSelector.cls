@@ -30,4 +30,35 @@ public inherited sharing class SlaMilestoneSelector {
     }
     return milestonesByCaseId;
   }
+
+  /**
+   * Running milestones the escalation job must look at: Open ones past their
+   * at-risk point, and At Risk ones past their target. Paused and completed
+   * milestones are never due.
+   */
+  public Database.QueryLocator queryLocatorDueForEscalation(Datetime asOf) {
+    String openStatus = SlaConstants.MILESTONE_OPEN;
+    String atRiskStatus = SlaConstants.MILESTONE_AT_RISK;
+    return Database.getQueryLocator(
+      [
+        SELECT
+          Id,
+          Case__c,
+          Type__c,
+          Status__c,
+          Target_At__c,
+          At_Risk_At__c,
+          Completed_At__c,
+          Paused_Since__c,
+          Paused_Minutes__c
+        FROM SLA_Milestone__c
+        WHERE
+          Completed_At__c = NULL
+          AND ((Status__c = :openStatus
+          AND At_Risk_At__c <= :asOf)
+          OR (Status__c = :atRiskStatus
+          AND Target_At__c < :asOf))
+      ]
+    );
+  }
 }

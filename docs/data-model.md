@@ -102,12 +102,13 @@ Rules are evaluated by `Sort_Order__c`; the first match wins. An empty tier matc
 5. When the priority changes, recompute the open milestones.
 6. While the case is Waiting on Customer, open milestones are Paused. On resume, the paused minutes are added and the deadlines recomputed.
 
-**Escalation** (scheduled Batch Apex):
+**Escalation** (`SlaEscalationBatch`, scheduled every 15 minutes):
 
-1. An open milestone past `At_Risk_At__c` becomes At Risk and the case goes to level 1.
+1. A running milestone past `At_Risk_At__c` becomes At Risk and the case goes to level 1. The owner is unchanged.
 2. An open milestone past `Target_At__c` becomes Breached, the case goes to level 2 and moves to `Tier2_Escalations`.
 3. Every escalation creates an `Escalation__c` record and, from Phase 4, publishes `Case_Escalated__e`.
-4. The case `SLA_Status__c` always reflects the worst status among its open milestones.
+4. The case `SLA_Status__c` always reflects the worst status among its milestones.
+5. Each level is escalated once. Paused and completed milestones never escalate; a breach that is already history (for example, a late first response) shows in `SLA_Status__c` but does not move the case to Tier 2.
 
 ## Coming in later phases
 

@@ -31,14 +31,14 @@ flowchart LR
 
 ## Roadmap
 
-| Fase            | Escopo                                                                                                    | Status       |
-| --------------- | --------------------------------------------------------------------------------------------------------- | ------------ |
-| 1. Fundação     | Projeto SFDX, convenções, modelo de dados, ADRs                                                           | Concluída    |
-| 2. Domínio      | Metadata do modelo, trigger framework, motores de roteamento, SLA e escalonamento, cobertura acima de 90% | Em andamento |
-| 3. Interface    | Console do agente em LWC com testes Jest                                                                  | Planejada    |
-| 4. Integração   | Portal em Node.js + TypeScript, OAuth, Named Credentials, Platform Events                                 | Planejada    |
-| 5. DevOps       | GitHub Actions com scratch orgs, análise estática, badges de cobertura                                    | Planejada    |
-| 6. IA e vitrine | Classificação de chamados com IA, documentação final, vídeo-demo                                          | Planejada    |
+| Fase            | Escopo                                                                                                    | Status    |
+| --------------- | --------------------------------------------------------------------------------------------------------- | --------- |
+| 1. Fundação     | Projeto SFDX, convenções, modelo de dados, ADRs                                                           | Concluída |
+| 2. Domínio      | Metadata do modelo, trigger framework, motores de roteamento, SLA e escalonamento, cobertura acima de 90% | Concluída |
+| 3. Interface    | Console do agente em LWC com testes Jest                                                                  | Próxima   |
+| 4. Integração   | Portal em Node.js + TypeScript, OAuth, Named Credentials, Platform Events                                 | Planejada |
+| 5. DevOps       | GitHub Actions com scratch orgs, análise estática, badges de cobertura                                    | Planejada |
+| 6. IA e vitrine | Classificação de chamados com IA, documentação final, vídeo-demo                                          | Planejada |
 
 ## Documentação
 
@@ -61,8 +61,9 @@ sf org login web --set-default-dev-hub --alias devhub
 sf org create scratch --definition-file config/project-scratch-def.json --alias service-hub --duration-days 30 --set-default
 sf project deploy start
 
-# 4. Dar acesso e abrir a org
+# 4. Dar acesso, agendar o job de escalonamento e abrir a org
 sf org assign permset --name Service_Hub_Agent
+sf apex run --file scripts/apex/schedule-escalation.apex
 sf org open
 ```
 
@@ -78,6 +79,7 @@ force-app/main/default/
 ├── settings/            Business Hours
 ├── standardValueSets/   Valores de Status, Priority e Origin do Case
 └── triggers/            Um trigger por objeto
+scripts/apex/            Scripts Apex avulsos (agendamento de jobs)
 config/                  Definição da scratch org
 docs/                    Modelo de dados e ADRs
 ```
