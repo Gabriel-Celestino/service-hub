@@ -108,4 +108,26 @@ private class CaseRoutingServiceTest {
       'A bypassed handler must not change the owner'
     );
   }
+
+  @IsTest
+  static void ignoresEmptyInput() {
+    List<Case> noCases = new List<Case>();
+
+    CaseRoutingService.assignQueues(noCases);
+    CaseRoutingService.assignQueues(null);
+
+    Assert.isTrue(noCases.isEmpty(), 'Empty input should be a no-op');
+  }
+
+  @IsTest
+  static void selectorsReturnEmptyResultsForEmptyInput() {
+    Assert.isTrue(
+      new QueueSelector().selectIdsByDeveloperName(new Set<String>()).isEmpty(),
+      'No queue names should return no queues'
+    );
+    Assert.isTrue(
+      new AccountSelector().selectByIds(new Set<Id>()).isEmpty(),
+      'No account ids should return no accounts'
+    );
+  }
 }

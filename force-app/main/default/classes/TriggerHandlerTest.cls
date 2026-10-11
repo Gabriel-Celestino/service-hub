@@ -86,4 +86,29 @@ private class TriggerHandlerTest {
       'Bypass should be cleared'
     );
   }
+
+  /** Overrides nothing: every event falls through to the base no-ops. */
+  private class NoOpHandler extends TriggerHandler {
+  }
+
+  @IsTest
+  static void baseMethodsAreSafeNoOps() {
+    Integer operationsRun = 0;
+    for (System.TriggerOperation operation : System.TriggerOperation.values()) {
+      NoOpHandler handler = new NoOpHandler();
+      TriggerHandler base = handler;
+      base.operation = operation;
+      base.newRecords = new List<SObject>();
+      base.oldMap = new Map<Id, SObject>();
+
+      handler.run();
+      operationsRun++;
+    }
+
+    Assert.areEqual(
+      System.TriggerOperation.values().size(),
+      operationsRun,
+      'Every operation should run without overrides and without errors'
+    );
+  }
 }
