@@ -45,18 +45,31 @@ public without sharing class SlaEscalationBatch implements Database.Batchable<SO
     Database.executeBatch(new SlaEscalationBatch(), BATCH_SIZE);
   }
 
-  /** Schedules four hourly jobs, at minutes 0, 15, 30 and 45. Returns the job ids. */
+  /**
+   * Schedules four hourly jobs, at minutes 0, 15, 30 and 45. Idempotent: jobs
+   * that are already scheduled are kept, so running it twice is safe.
+   * Returns the ids of all four jobs.
+   */
   public static List<Id> scheduleEvery15Minutes() {
+    String namePattern = JOB_NAME_PREFIX + '%';
+    Map<String, Id> existingJobIds = new Map<String, Id>();
+    for (CronTrigger job : [
+      SELECT Id, CronJobDetail.Name
+      FROM CronTrigger
+      WHERE CronJobDetail.Name LIKE :namePattern
+    ]) {
+      existingJobIds.put(job.CronJobDetail.Name, job.Id);
+    }
+
     List<Id> jobIds = new List<Id>();
     for (Integer minute : new List<Integer>{ 0, 15, 30, 45 }) {
+      String jobName = JOB_NAME_PREFIX + minute;
+      if (existingJobIds.containsKey(jobName)) {
+        jobIds.add(existingJobIds.get(jobName));
+        continue;
+      }
       String cron = '0 ' + minute + ' * * * ?';
-      jobIds.add(
-        System.schedule(
-          JOB_NAME_PREFIX + minute,
-          cron,
-          new SlaEscalationBatch()
-        )
-      );
+      jobIds.add(System.schedule(jobName, cron, new SlaEscalationBatch()));
     }
     return jobIds;
   }

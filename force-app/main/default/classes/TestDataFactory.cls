@@ -57,4 +57,46 @@ public class TestDataFactory {
     ]
     .Id;
   }
+
+  /**
+   * A support agent: System Administrator profile (sees every record) plus
+   * the Service_Hub_Agent permission set, which is the only source of access
+   * to the project's custom fields.
+   */
+  public static User createAgentUser() {
+    sequence++;
+    Profile adminProfile = [
+      SELECT Id
+      FROM Profile
+      WHERE Name = 'System Administrator'
+      LIMIT 1
+    ];
+    User agent = new User(
+      Alias = 'agent' + Math.mod(sequence, 100),
+      Email = 'agent@servicehub.test',
+      EmailEncodingKey = 'UTF-8',
+      LastName = 'Agent ' + sequence,
+      LanguageLocaleKey = 'en_US',
+      LocaleSidKey = 'en_US',
+      ProfileId = adminProfile.Id,
+      TimeZoneSidKey = 'America/Sao_Paulo',
+      Username = 'agent' +
+        sequence +
+        '.' +
+        System.now().getTime() +
+        '@servicehub.test'
+    );
+    insert agent;
+    PermissionSet agentPermissions = [
+      SELECT Id
+      FROM PermissionSet
+      WHERE Name = 'Service_Hub_Agent'
+      LIMIT 1
+    ];
+    insert new PermissionSetAssignment(
+      AssigneeId = agent.Id,
+      PermissionSetId = agentPermissions.Id
+    );
+    return agent;
+  }
 }

@@ -1,0 +1,36 @@
+{
+  "slaStatus": "At Risk",
+  "escalationLevel": 1,
+  "milestones": [
+    {
+      "id": "a01000000000001AAA",
+      "type": "First Response",
+      "status": "At Risk",
+      "targetAt": "2099-01-05T12:30:00.000Z",
+      "atRiskAt": "2099-01-05T12:22:00.000Z",
+      "completedAt": null,
+      "pausedSince": null,
+      "pausedMinutes": 0
+    },
+    {
+      "id": "a01000000000002AAA",
+      "type": "Resolution",
+      "status": "Open",
+      "targetAt": "2099-01-05T16:00:00.000Z",
+      "atRiskAt": "2099-01-05T15:00:00.000Z",
+      "completedAt": null,
+      "pausedSince": null,
+      "pausedMinutes": 0
+    }
+  ],
+  "escalations": [
+    {
+      "id": "a02000000000001AAA",
+      "name": "ESC-000001",
+      "level": 1,
+      "reason": "SLA At Risk",
+      "targetQueue": null,
+      "createdDate": "2026-01-05T12:23:00.000Z"
+    }
+  ]
+}

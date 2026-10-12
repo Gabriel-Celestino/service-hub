@@ -61,4 +61,23 @@ public inherited sharing class SlaMilestoneSelector {
       ]
     );
   }
+
+  /** Milestones of one case as the current user sees them (user mode). */
+  public List<SLA_Milestone__c> selectVisibleByCaseId(Id caseId) {
+    return [
+      SELECT
+        Id,
+        Type__c,
+        Status__c,
+        Target_At__c,
+        At_Risk_At__c,
+        Completed_At__c,
+        Paused_Since__c,
+        Paused_Minutes__c
+      FROM SLA_Milestone__c
+      WHERE Case__c = :caseId
+      WITH USER_MODE
+      ORDER BY Type__c
+    ];
+  }
 }

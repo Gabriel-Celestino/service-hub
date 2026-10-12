@@ -10,6 +10,10 @@ O objetivo é mostrar engenharia Salesforce de nível profissional, e não só c
 
 > O nome do projeto é provisório.
 
+![SLA Console: chamados abertos ordenados por urgência, com contadores ao vivo](docs/images/sla-console.png)
+
+_O SLA Console: chamados ordenados por urgência, com contadores ao vivo e níveis de escalonamento._
+
 ## Como funciona
 
 ```mermaid
@@ -31,14 +35,14 @@ flowchart LR
 
 ## Roadmap
 
-| Fase            | Escopo                                                                                                    | Status    |
-| --------------- | --------------------------------------------------------------------------------------------------------- | --------- |
-| 1. Fundação     | Projeto SFDX, convenções, modelo de dados, ADRs                                                           | Concluída |
-| 2. Domínio      | Metadata do modelo, trigger framework, motores de roteamento, SLA e escalonamento, cobertura acima de 90% | Concluída |
-| 3. Interface    | Console do agente em LWC com testes Jest                                                                  | Próxima   |
-| 4. Integração   | Portal em Node.js + TypeScript, OAuth, Named Credentials, Platform Events                                 | Planejada |
-| 5. DevOps       | GitHub Actions com scratch orgs, análise estática, badges de cobertura                                    | Planejada |
-| 6. IA e vitrine | Classificação de chamados com IA, documentação final, vídeo-demo                                          | Planejada |
+| Fase            | Escopo                                                                                                    | Status       |
+| --------------- | --------------------------------------------------------------------------------------------------------- | ------------ |
+| 1. Fundação     | Projeto SFDX, convenções, modelo de dados, ADRs                                                           | Concluída    |
+| 2. Domínio      | Metadata do modelo, trigger framework, motores de roteamento, SLA e escalonamento, cobertura acima de 90% | Concluída    |
+| 3. Interface    | Console do agente em LWC com testes Jest                                                                  | Em andamento |
+| 4. Integração   | Portal em Node.js + TypeScript, OAuth, Named Credentials, Platform Events                                 | Planejada    |
+| 5. DevOps       | GitHub Actions com scratch orgs, análise estática, badges de cobertura                                    | Planejada    |
+| 6. IA e vitrine | Classificação de chamados com IA, documentação final, vídeo-demo                                          | Planejada    |
 
 ## Documentação
 
@@ -65,21 +69,37 @@ sf project deploy start
 sf org assign permset --name Service_Hub_Agent
 sf apex run --file scripts/apex/schedule-escalation.apex
 sf org open
+
+# 5. (Opcional) Carregar dados de demonstração: contas e chamados em todos os estados de SLA
+sf apex run --file scripts/apex/seed-demo-data.apex
 ```
+
+## Usando o app
+
+Abra o App Launcher e escolha **Service Hub**.
+
+- Aba **SLA Console**: chamados abertos ordenados por urgência (estourados, em risco, no prazo, pausados), contadores ao vivo e filtros _At risk & breached_ e _My queues_. Atualiza a cada minuto.
+- Aba **Cases**: cada chamado mostra um painel de SLA ao vivo, com os dois prazos e a trilha de escalonamento.
+
+A scratch org permite deploy com jobs Apex agendados (`settings/Deployment.settings-meta.xml`), então o job de escalonamento não bloqueia deploys. Numa org sem essa configuração, rode `scripts/apex/unschedule-escalation.apex` antes do deploy e reagende depois.
 
 ## Estrutura do projeto
 
 ```
 force-app/main/default/
+├── applications/        App Lightning Service Hub
 ├── classes/             Apex: trigger framework, serviços, domínio, selectors, testes
 ├── customMetadata/      Políticas de SLA e regras de roteamento (registros)
+├── flexipages/          Página do SLA Console e página de registro do Case
+├── lwc/                 Lightning Web Components com testes Jest
 ├── objects/             Objetos customizados e campos em Account e Case
 ├── permissionsets/      Service_Hub_Agent
 ├── queues/              Filas de atendimento
-├── settings/            Business Hours
+├── settings/            Business Hours e configurações de deploy
 ├── standardValueSets/   Valores de Status, Priority e Origin do Case
+├── tabs/                Aba SLA Console
 └── triggers/            Um trigger por objeto
-scripts/apex/            Scripts Apex avulsos (agendamento de jobs)
+scripts/apex/            Scripts Apex avulsos (agendamento de jobs, dados de demonstração)
 config/                  Definição da scratch org
 docs/                    Modelo de dados e ADRs
 ```

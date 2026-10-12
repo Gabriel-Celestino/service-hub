@@ -16,4 +16,17 @@ public inherited sharing class QueueSelector {
     }
     return queueIdsByName;
   }
+
+  /** Ids of the queues the user belongs to directly. */
+  public Set<Id> selectQueueIdsForMember(Id userId) {
+    Set<Id> queueIds = new Set<Id>();
+    for (GroupMember membership : [
+      SELECT GroupId
+      FROM GroupMember
+      WHERE UserOrGroupId = :userId AND Group.Type = 'Queue'
+    ]) {
+      queueIds.add(membership.GroupId);
+    }
+    return queueIds;
+  }
 }
