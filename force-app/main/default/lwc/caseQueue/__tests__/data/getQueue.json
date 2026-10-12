@@ -1,0 +1,68 @@
+[
+  {
+    "caseId": "500000000000001AAA",
+    "caseNumber": "00001001",
+    "subject": "Production API returning 500 errors",
+    "accountName": "Acme Corporation",
+    "priority": "Critical",
+    "status": "New",
+    "ownerName": "Tier 2 Escalations",
+    "escalationLevel": 2,
+    "urgencyRank": 0,
+    "urgency": "Breached",
+    "nextMilestone": {
+      "id": "a01000000000001AAA",
+      "type": "First Response",
+      "status": "Breached",
+      "targetAt": "2026-01-05T11:35:00.000Z",
+      "atRiskAt": "2026-01-05T11:20:00.000Z",
+      "completedAt": null,
+      "pausedSince": null,
+      "pausedMinutes": 0
+    }
+  },
+  {
+    "caseId": "500000000000002AAA",
+    "caseNumber": "00001002",
+    "subject": "SSO login failing for all users",
+    "accountName": "Acme Corporation",
+    "priority": "High",
+    "status": "New",
+    "ownerName": "Access Support",
+    "escalationLevel": 1,
+    "urgencyRank": 1,
+    "urgency": "At Risk",
+    "nextMilestone": {
+      "id": "a01000000000002AAA",
+      "type": "First Response",
+      "status": "At Risk",
+      "targetAt": "2099-01-05T12:12:00.000Z",
+      "atRiskAt": "2026-01-05T11:58:00.000Z",
+      "completedAt": null,
+      "pausedSince": null,
+      "pausedMinutes": 0
+    }
+  },
+  {
+    "caseId": "500000000000003AAA",
+    "caseNumber": "00001003",
+    "subject": "Question about enterprise pricing",
+    "accountName": null,
+    "priority": "Medium",
+    "status": "New",
+    "ownerName": "General Support",
+    "escalationLevel": 0,
+    "urgencyRank": 2,
+    "urgency": "On Track",
+    "nextMilestone": {
+      "id": "a01000000000003AAA",
+      "type": "First Response",
+      "status": "Open",
+      "targetAt": "2099-01-05T18:00:00.000Z",
+      "atRiskAt": "2099-01-05T16:30:00.000Z",
+      "completedAt": null,
+      "pausedSince": null,
+      "pausedMinutes": 0
+    }
+  }
+]

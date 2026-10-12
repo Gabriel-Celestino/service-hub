@@ -1,0 +1,36 @@
+.sla-badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  border: 1px solid currentColor;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sla-badge_on-track {
+  color: #2e844a;
+  background: #ebf7e6;
+}
+
+.sla-badge_at-risk {
+  color: #8c4b02;
+  background: #fef1e1;
+}
+
+.sla-badge_breached {
+  color: #ffffff;
+  background: #ba0517;
+  border-color: #ba0517;
+}
+
+.sla-badge_paused {
+  color: #5c5c5c;
+  background: #f3f3f3;
+}
+
+.sla-badge_met {
+  color: #2e844a;
+  background: #ffffff;
+}

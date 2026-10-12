@@ -1,0 +1,27 @@
+.sla-status {
+  display: inline-block;
+  padding: 0.125rem 0.625rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  background: #f3f3f3;
+  color: #5c5c5c;
+}
+
+.sla-status_on-track,
+.sla-status_met {
+  background: #ebf7e6;
+  color: #2e844a;
+}
+
+.sla-status_at-risk {
+  background: #fef1e1;
+  color: #8c4b02;
+}
+
+.sla-status_breached {
+  background: #ba0517;
+  color: #ffffff;
+}

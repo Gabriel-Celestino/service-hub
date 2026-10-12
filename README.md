@@ -31,14 +31,14 @@ flowchart LR
 
 ## Roadmap
 
-| Phase              | Scope                                                                                      | Status  |
-| ------------------ | ------------------------------------------------------------------------------------------ | ------- |
-| 1. Foundation      | SFDX project, conventions, data model, ADRs                                                | Done    |
-| 2. Domain          | Data model metadata, trigger framework, routing, SLA and escalation engines, 90%+ coverage | Done    |
-| 3. Interface       | Agent console in LWC with Jest tests                                                       | Next    |
-| 4. Integration     | Node.js + TypeScript portal, OAuth, Named Credentials, Platform Events                     | Planned |
-| 5. DevOps          | GitHub Actions with scratch orgs, static analysis, coverage badges                         | Planned |
-| 6. AI and showcase | AI case classification, final docs, demo video                                             | Planned |
+| Phase              | Scope                                                                                      | Status      |
+| ------------------ | ------------------------------------------------------------------------------------------ | ----------- |
+| 1. Foundation      | SFDX project, conventions, data model, ADRs                                                | Done        |
+| 2. Domain          | Data model metadata, trigger framework, routing, SLA and escalation engines, 90%+ coverage | Done        |
+| 3. Interface       | Agent console in LWC with Jest tests                                                       | In progress |
+| 4. Integration     | Node.js + TypeScript portal, OAuth, Named Credentials, Platform Events                     | Planned     |
+| 5. DevOps          | GitHub Actions with scratch orgs, static analysis, coverage badges                         | Planned     |
+| 6. AI and showcase | AI case classification, final docs, demo video                                             | Planned     |
 
 ## Documentation
 
@@ -65,21 +65,37 @@ sf project deploy start
 sf org assign permset --name Service_Hub_Agent
 sf apex run --file scripts/apex/schedule-escalation.apex
 sf org open
+
+# 5. (Optional) Load demo data: accounts and cases in every SLA state
+sf apex run --file scripts/apex/seed-demo-data.apex
 ```
+
+## Using the app
+
+Open the App Launcher and choose **Service Hub**.
+
+- **SLA Console** tab: open cases ranked by urgency (breached, at risk, on track, paused), live countdowns, filters for _At risk & breached_ and _My queues_. Refreshes every minute.
+- **Cases** tab: each case shows a live SLA panel with both deadlines and the escalation trail.
+
+The scratch org allows deployments while Apex jobs are scheduled (`settings/Deployment.settings-meta.xml`), so the escalation job does not block deploys. In an org without that setting, run `scripts/apex/unschedule-escalation.apex` before deploying and reschedule afterwards.
 
 ## Project structure
 
 ```
 force-app/main/default/
+├── applications/        Service Hub Lightning app
 ├── classes/             Apex: trigger framework, services, domain, selectors, tests
 ├── customMetadata/      SLA policies and routing rules (records)
+├── flexipages/          SLA Console page and Case record page
+├── lwc/                 Lightning Web Components with Jest tests
 ├── objects/             Custom objects and fields on Account and Case
 ├── permissionsets/      Service_Hub_Agent
 ├── queues/              Support queues
-├── settings/            Business Hours
+├── settings/            Business Hours and deployment settings
 ├── standardValueSets/   Case Status, Priority and Origin values
+├── tabs/                SLA Console tab
 └── triggers/            One trigger per object
-scripts/apex/            One-off Apex scripts (job scheduling)
+scripts/apex/            One-off Apex scripts (job scheduling, demo data)
 config/                  Scratch org definition
 docs/                    Data model and ADRs
 ```

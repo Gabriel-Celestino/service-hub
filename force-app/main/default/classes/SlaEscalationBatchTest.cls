@@ -235,13 +235,28 @@ private class SlaEscalationBatchTest {
   }
 
   @IsTest
-  static void schedulesFourJobsPerHour() {
-    List<Id> jobIds = SlaEscalationBatch.scheduleEvery15Minutes();
+  static void schedulesFourJobsPerHourOnlyOnce() {
+    List<Id> firstRun = SlaEscalationBatch.scheduleEvery15Minutes();
+    List<Id> secondRun = SlaEscalationBatch.scheduleEvery15Minutes();
 
     Assert.areEqual(
       4,
-      [SELECT COUNT() FROM CronTrigger WHERE Id IN :jobIds],
+      new Set<Id>(firstRun).size(),
       'Jobs at minutes 0, 15, 30 and 45'
+    );
+    Assert.areEqual(
+      new Set<Id>(firstRun),
+      new Set<Id>(secondRun),
+      'A second run keeps the same jobs'
+    );
+    Assert.areEqual(
+      4,
+      [
+        SELECT COUNT()
+        FROM CronTrigger
+        WHERE CronJobDetail.Name LIKE 'SLA escalation at minute %'
+      ],
+      'No duplicates, whether or not the org already had the jobs'
     );
   }
 

@@ -1,0 +1,77 @@
+<template>
+  <lightning-card title="SLA" icon-name="standard:entitlement">
+    <span slot="actions" class={statusClass} data-id="status">{slaStatus}</span>
+
+    <div class="slds-p-horizontal_medium">
+      <template lwc:if={isLoading}>
+        <lightning-spinner
+          size="small"
+          alternative-text="Loading SLA"
+        ></lightning-spinner>
+      </template>
+
+      <template lwc:elseif={errorMessage}>
+        <p class="slds-text-color_error" data-id="error">{errorMessage}</p>
+      </template>
+
+      <template lwc:else>
+        <template lwc:if={hasMilestones}>
+          <ul class="slds-has-dividers_bottom-space">
+            <template for:each={milestones} for:item="milestone">
+              <li key={milestone.id} class="slds-item" data-id="milestone">
+                <div
+                  class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center"
+                >
+                  <span class="slds-text-title_bold">{milestone.type}</span>
+                  <c-sla-countdown milestone={milestone}></c-sla-countdown>
+                </div>
+                <p class="slds-text-body_small slds-text-color_weak">
+                  Due
+                  <lightning-formatted-date-time
+                    value={milestone.targetAt}
+                    year="numeric"
+                    month="short"
+                    day="2-digit"
+                    hour="2-digit"
+                    minute="2-digit"
+                  ></lightning-formatted-date-time>
+                </p>
+              </li>
+            </template>
+          </ul>
+        </template>
+        <template lwc:else>
+          <p class="slds-text-color_weak" data-id="no-milestones">
+            This case has no SLA milestones.
+          </p>
+        </template>
+
+        <h3
+          class="slds-text-heading_small slds-m-top_medium slds-m-bottom_x-small"
+        >
+          Escalations
+        </h3>
+        <template lwc:if={hasEscalations}>
+          <ul class="slds-list_dotted">
+            <template for:each={escalations} for:item="escalation">
+              <li key={escalation.id} data-id="escalation">
+                <span class="slds-text-title_bold">{escalation.title}</span>
+                <span class="slds-text-body_small slds-text-color_weak">
+                  · {escalation.queueLabel} ·
+                  <lightning-relative-date-time
+                    value={escalation.createdDate}
+                  ></lightning-relative-date-time>
+                </span>
+              </li>
+            </template>
+          </ul>
+        </template>
+        <template lwc:else>
+          <p class="slds-text-color_weak" data-id="no-escalations">
+            No escalations.
+          </p>
+        </template>
+      </template>
+    </div>
+  </lightning-card>
+</template>

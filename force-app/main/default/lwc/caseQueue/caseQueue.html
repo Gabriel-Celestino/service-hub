@@ -1,0 +1,130 @@
+<template>
+  <lightning-card title="SLA Queue" icon-name="standard:queue">
+    <div slot="actions" class="slds-grid slds-grid_vertical-align-center">
+      <template lwc:if={lastRefreshed}>
+        <span
+          class="slds-text-body_small slds-text-color_weak slds-m-right_small"
+          data-id="refreshed"
+        >
+          Updated
+          <lightning-formatted-date-time
+            value={lastRefreshed}
+            hour="2-digit"
+            minute="2-digit"
+            second="2-digit"
+          ></lightning-formatted-date-time>
+        </span>
+      </template>
+      <lightning-button-icon
+        icon-name="utility:refresh"
+        alternative-text="Refresh"
+        title="Refresh"
+        onclick={handleRefresh}
+        data-id="refresh"
+      ></lightning-button-icon>
+    </div>
+
+    <div class="slds-p-horizontal_medium">
+      <div
+        class="slds-grid slds-wrap slds-gutters_x-small slds-m-bottom_medium"
+      >
+        <template for:each={tiles} for:item="tile">
+          <div
+            key={tile.key}
+            class="slds-col slds-size_1-of-2 slds-medium-size_1-of-4"
+          >
+            <div class={tile.className} data-id="tile" data-key={tile.key}>
+              <p class="tile__count">{tile.count}</p>
+              <p class="tile__label">{tile.label}</p>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <lightning-radio-group
+        name="scope"
+        label="Show"
+        options={scopeOptions}
+        value={scope}
+        type="button"
+        onchange={handleScopeChange}
+        class="slds-m-bottom_small"
+        data-id="scope"
+      ></lightning-radio-group>
+
+      <template lwc:if={isLoading}>
+        <lightning-spinner
+          size="small"
+          alternative-text="Loading queue"
+        ></lightning-spinner>
+      </template>
+
+      <template lwc:if={errorMessage}>
+        <p class="slds-text-color_error" data-id="error">{errorMessage}</p>
+      </template>
+
+      <template lwc:if={hasRows}>
+        <table
+          class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped"
+          aria-label="Cases ranked by SLA urgency"
+        >
+          <thead>
+            <tr class="slds-line-height_reset">
+              <th scope="col">Urgency</th>
+              <th scope="col">Case</th>
+              <th scope="col">Subject</th>
+              <th scope="col">Account</th>
+              <th scope="col">Priority</th>
+              <th scope="col">Owner</th>
+              <th scope="col">Next deadline</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={rows} for:item="row">
+              <tr key={row.caseId} data-id="row">
+                <td>
+                  <span class={row.urgencyClass}>{row.urgency}</span>
+                  <template lwc:if={row.escalationLabel}>
+                    <span class="escalation" title="Escalation level"
+                      >{row.escalationLabel}</span
+                    >
+                  </template>
+                </td>
+                <td>
+                  <a
+                    href="#"
+                    data-case-id={row.caseId}
+                    onclick={handleOpenCase}
+                    data-id="case-link"
+                    >{row.caseNumber}</a
+                  >
+                </td>
+                <td class="slds-truncate" title={row.subject}>{row.subject}</td>
+                <td>{row.accountLabel}</td>
+                <td>{row.priority}</td>
+                <td>{row.ownerName}</td>
+                <td>
+                  <template lwc:if={row.nextMilestone}>
+                    <span
+                      class="slds-text-body_small slds-text-color_weak slds-m-right_x-small"
+                      >{row.nextMilestone.type}</span
+                    >
+                    <c-sla-countdown
+                      milestone={row.nextMilestone}
+                    ></c-sla-countdown>
+                  </template>
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+
+      <template lwc:if={showEmptyState}>
+        <p class="slds-text-color_weak slds-p-vertical_medium" data-id="empty">
+          No open cases in this view.
+        </p>
+      </template>
+    </div>
+  </lightning-card>
+</template>

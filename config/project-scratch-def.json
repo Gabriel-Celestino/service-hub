@@ -8,6 +8,9 @@
     },
     "mobileSettings": {
       "enableS1EncryptedStoragePref2": false
+    },
+    "deploymentSettings": {
+      "doesSkipAsyncApexValidation": true
     }
   },
   "description": "Scratch org for Service Hub development and CI",
