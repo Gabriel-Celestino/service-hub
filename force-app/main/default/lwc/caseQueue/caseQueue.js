@@ -53,7 +53,7 @@ export default class CaseQueue extends NavigationMixin(LightningElement) {
           item.escalationLevel > 0 ? `L${item.escalationLevel}` : ""
       }));
       this.errorMessage = undefined;
-      this.lastRefreshed = new Date().toISOString();
+      this.lastRefreshed = new Date();
     } catch (error) {
       this.errorMessage = error?.body?.message ?? "Unable to load the queue.";
     } finally {
@@ -89,6 +89,22 @@ export default class CaseQueue extends NavigationMixin(LightningElement) {
       count: this.rows.filter((row) => row.urgency === tile.key).length,
       className: `tile tile_${statusModifier(tile.key)}`
     }));
+  }
+
+  get refreshedLabel() {
+    if (!this.lastRefreshed) {
+      return "";
+    }
+
+    const time = this.lastRefreshed.toLocaleTimeString([], {
+      hour: "2-digit",
+
+      minute: "2-digit",
+
+      second: "2-digit"
+    });
+
+    return `Updated ${time}`;
   }
 
   get hasRows() {

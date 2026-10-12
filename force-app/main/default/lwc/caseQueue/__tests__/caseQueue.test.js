@@ -71,6 +71,7 @@ describe("c-case-queue", () => {
       3
     );
     expect(getQueue).toHaveBeenCalledWith({ scope: "ALL" });
+    expect(one(element, "refreshed").textContent).toMatch(/^Updated \d/);
   });
 
   it("counts cases per urgency in the tiles", async () => {

@@ -10,6 +10,10 @@ O objetivo é mostrar engenharia Salesforce de nível profissional, e não só c
 
 > O nome do projeto é provisório.
 
+![SLA Console: chamados abertos ordenados por urgência, com contadores ao vivo](docs/images/sla-console.png)
+
+_O SLA Console: chamados ordenados por urgência, com contadores ao vivo e níveis de escalonamento._
+
 ## Como funciona
 
 ```mermaid

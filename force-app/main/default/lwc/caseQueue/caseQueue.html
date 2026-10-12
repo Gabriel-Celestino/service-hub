@@ -5,15 +5,8 @@
         <span
           class="slds-text-body_small slds-text-color_weak slds-m-right_small"
           data-id="refreshed"
+          >{refreshedLabel}</span
         >
-          Updated
-          <lightning-formatted-date-time
-            value={lastRefreshed}
-            hour="2-digit"
-            minute="2-digit"
-            second="2-digit"
-          ></lightning-formatted-date-time>
-        </span>
       </template>
       <lightning-button-icon
         icon-name="utility:refresh"

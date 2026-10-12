@@ -10,6 +10,10 @@ The goal is to show production-grade Salesforce engineering, not just configurat
 
 > Project name is provisional.
 
+![SLA Console: open cases ranked by urgency, with live countdowns](docs/images/sla-console.png)
+
+_The SLA Console: cases ranked by urgency, with live countdowns and escalation levels._
+
 ## How it works
 
 ```mermaid
