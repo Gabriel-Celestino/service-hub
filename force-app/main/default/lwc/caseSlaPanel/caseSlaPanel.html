@@ -26,7 +26,7 @@
                   <c-sla-countdown milestone={milestone}></c-sla-countdown>
                 </div>
                 <p class="slds-text-body_small slds-text-color_weak">
-                  Due
+                  <span class="slds-m-right_xx-small">Due</span>
                   <lightning-formatted-date-time
                     value={milestone.targetAt}
                     year="numeric"
@@ -56,12 +56,14 @@
             <template for:each={escalations} for:item="escalation">
               <li key={escalation.id} data-id="escalation">
                 <span class="slds-text-title_bold">{escalation.title}</span>
-                <span class="slds-text-body_small slds-text-color_weak">
-                  · {escalation.queueLabel} ·
-                  <lightning-relative-date-time
-                    value={escalation.createdDate}
-                  ></lightning-relative-date-time>
-                </span>
+                <span
+                  class="slds-text-body_small slds-text-color_weak slds-m-left_xx-small"
+                  >{escalation.detail}</span
+                >
+                <lightning-relative-date-time
+                  class="slds-text-body_small slds-text-color_weak slds-m-left_xx-small"
+                  value={escalation.createdAt}
+                ></lightning-relative-date-time>
               </li>
             </template>
           </ul>

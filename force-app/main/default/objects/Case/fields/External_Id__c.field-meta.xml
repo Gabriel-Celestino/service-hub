@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>External_Id__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description
+  >Id of the case in the customer portal. Makes case creation from the portal idempotent.</description>
+    <externalId>true</externalId>
+    <inlineHelpText>Set by the customer portal. Do not edit.</inlineHelpText>
+    <label>External Id</label>
+    <length>64</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

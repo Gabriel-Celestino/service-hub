@@ -64,7 +64,7 @@ private class SlaEscalationBatchTest {
 
     Case saved = reloadCase(record.Id);
     Escalation__c escalation = [
-      SELECT Level__c, Reason__c, Target_Queue__c
+      SELECT Level__c, Reason__c, Target_Queue__c, Event_Published__c
       FROM Escalation__c
       WHERE Case__c = :record.Id
     ];
@@ -100,7 +100,7 @@ private class SlaEscalationBatchTest {
 
     Case saved = reloadCase(record.Id);
     Escalation__c escalation = [
-      SELECT Level__c, Reason__c, Target_Queue__c
+      SELECT Level__c, Reason__c, Target_Queue__c, Event_Published__c
       FROM Escalation__c
       WHERE Case__c = :record.Id
     ];
@@ -129,6 +129,11 @@ private class SlaEscalationBatchTest {
       TestDataFactory.queueId(EscalationPolicy.TIER2_QUEUE),
       saved.OwnerId,
       'Case moved to Tier 2'
+    );
+    Assert.isTrue(
+      escalation.Event_Published__c,
+      'Case_Escalated__e queued for the portal. Publish results: ' +
+      SlaEscalationService.lastPublishResults
     );
   }
 

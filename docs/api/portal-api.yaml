@@ -1,0 +1,202 @@
+openapi: 3.0.3
+info:
+  title: Service Hub Portal API
+  version: 1.0.0
+  description: |
+    Apex REST API used by the customer portal to open cases and follow their SLA.
+
+    - Base URL: `https://{instance}.my.salesforce.com/services/apexrest`
+    - Authentication: OAuth 2.0 (client credentials flow), run as an integration user with the
+      `Service_Hub_Integration` permission set.
+    - Every response carries `X-Correlation-Id`. Send your own to trace a request end to end;
+      it is also stored in `Integration_Log__c`.
+    - Escalations are pushed separately as the `Case_Escalated__e` Platform Event (Pub/Sub API).
+servers:
+  - url: https://{instance}.my.salesforce.com/services/apexrest
+    variables:
+      instance:
+        default: example
+security:
+  - oauth2: []
+paths:
+  /portal/v1/cases:
+    post:
+      summary: Create a case
+      description: |
+        Idempotent on `externalId`: repeating a request returns the case created the first time
+        (200 instead of 201), so the portal can safely retry after a timeout.
+      parameters:
+        - $ref: "#/components/parameters/CorrelationId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CaseRequest"
+            example:
+              externalId: WEB-1001
+              subject: Checkout page is down
+              description: Customers get an error on payment.
+              category: Technical
+              priority: Critical
+              contactEmail: ana@acme.test
+      responses:
+        "201":
+          description: Case created
+          headers:
+            X-Correlation-Id:
+              $ref: "#/components/headers/CorrelationId"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "200":
+          description: A case with this externalId already exists; it is returned unchanged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+  /portal/v1/cases/{externalId}:
+    get:
+      summary: Read a case and its SLA
+      parameters:
+        - $ref: "#/components/parameters/CorrelationId"
+        - name: externalId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The case
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Case"
+        "404":
+          description: No case with this externalId
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          $ref: "#/components/responses/ServerError"
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://{instance}.my.salesforce.com/services/oauth2/token
+          scopes: {}
+  parameters:
+    CorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      description: "1-64 characters from A-Z a-z 0-9 and . _ : - (generated when missing or invalid)"
+      schema:
+        type: string
+  headers:
+    CorrelationId:
+      description: The correlation id used for this request
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: Invalid JSON or invalid fields; every invalid field is listed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            message: The request has invalid fields.
+            errors:
+              - field: subject
+                message: is required
+              - field: priority
+                message: must be one of Low, Medium, High, Critical
+            correlationId: 6f1c2a9e-8f0b-4c7e-9a43-2a1d5c3b7e10
+    ServerError:
+      description: Unexpected error; quote the correlation id when reporting it
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    CaseRequest:
+      type: object
+      required: [externalId, subject]
+      properties:
+        externalId:
+          type: string
+          pattern: "^[A-Za-z0-9._:-]{1,64}$"
+          description: The case id in the portal
+        subject:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          maxLength: 32000
+        category:
+          type: string
+          enum: [Billing, Technical, Access, Other]
+          default: Other
+        priority:
+          type: string
+          enum: [Low, Medium, High, Critical]
+          default: Medium
+        contactEmail:
+          type: string
+          format: email
+          description: Links the case to the contact (and its account, which sets the SLA tier)
+    Case:
+      type: object
+      properties:
+        caseId: { type: string }
+        caseNumber: { type: string }
+        externalId: { type: string }
+        status: { type: string }
+        priority: { type: string }
+        category: { type: string }
+        slaStatus:
+          type: string
+          enum: [On Track, At Risk, Paused, Breached, Met]
+        escalationLevel:
+          type: integer
+          enum: [0, 1, 2]
+        milestones:
+          type: array
+          items:
+            $ref: "#/components/schemas/Milestone"
+    Milestone:
+      type: object
+      properties:
+        id: { type: string }
+        type:
+          type: string
+          enum: [First Response, Resolution]
+        status:
+          type: string
+          enum: [Open, At Risk, Paused, Met, Breached]
+        targetAt: { type: string, format: date-time }
+        atRiskAt: { type: string, format: date-time }
+        completedAt: { type: string, format: date-time }
+        pausedSince: { type: string, format: date-time }
+        pausedMinutes: { type: integer }
+    Error:
+      type: object
+      properties:
+        message: { type: string }
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              message: { type: string }
+        correlationId: { type: string }

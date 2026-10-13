@@ -27,3 +27,7 @@ The same data is read in two very different situations. Automation (triggers, th
 - The `Service_Hub_Agent` permission set is the single source of access to the project's fields, Apex classes, app and tab.
 - Controller tests run as a dedicated agent user with that permission set, so a missing permission fails a test instead of production.
 - The console ranks cases from the milestones the agent can see, so it never leaks deadlines of inaccessible cases.
+
+## Update (2026-10-12)
+
+The access mode is now always explicit. In this org, Apex queries without a mode enforced the running user's field permissions, which broke automation running as the portal's integration user. Automation selectors use `WITH SYSTEM_MODE`, automation DML uses `insert as system` / `update as system`, and UI and API queries keep `WITH USER_MODE`. No query relies on the default any more.

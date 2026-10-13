@@ -9,6 +9,7 @@ public inherited sharing class CaseStatusSelector {
       SELECT ApiName
       FROM CaseStatus
       WHERE IsClosed = TRUE
+      WITH SYSTEM_MODE
     ]) {
       closedStatuses.add(status.ApiName);
     }

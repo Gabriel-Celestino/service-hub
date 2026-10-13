@@ -11,6 +11,7 @@ public inherited sharing class QueueSelector {
       SELECT Id, DeveloperName
       FROM Group
       WHERE Type = 'Queue' AND DeveloperName IN :developerNames
+      WITH SYSTEM_MODE
     ]) {
       queueIdsByName.put(queue.DeveloperName, queue.Id);
     }
@@ -24,6 +25,7 @@ public inherited sharing class QueueSelector {
       SELECT GroupId
       FROM GroupMember
       WHERE UserOrGroupId = :userId AND Group.Type = 'Queue'
+      WITH SYSTEM_MODE
     ]) {
       queueIds.add(membership.GroupId);
     }

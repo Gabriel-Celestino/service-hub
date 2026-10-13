@@ -11,10 +11,20 @@ public inherited sharing class OwnerSelector {
     if (ownerIds == null || ownerIds.isEmpty()) {
       return namesById;
     }
-    for (Group queue : [SELECT Id, Name FROM Group WHERE Id IN :ownerIds]) {
+    for (Group queue : [
+      SELECT Id, Name
+      FROM Group
+      WHERE Id IN :ownerIds
+      WITH SYSTEM_MODE
+    ]) {
       namesById.put(queue.Id, queue.Name);
     }
-    for (User person : [SELECT Id, Name FROM User WHERE Id IN :ownerIds]) {
+    for (User person : [
+      SELECT Id, Name
+      FROM User
+      WHERE Id IN :ownerIds
+      WITH SYSTEM_MODE
+    ]) {
       namesById.put(person.Id, person.Name);
     }
     return namesById;

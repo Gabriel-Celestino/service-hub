@@ -11,6 +11,7 @@ public inherited sharing class BusinessHoursSelector {
       SELECT Id, Name
       FROM BusinessHours
       WHERE IsActive = TRUE AND Name IN :names
+      WITH SYSTEM_MODE
     ]) {
       idsByName.put(hours.Name, hours.Id);
     }

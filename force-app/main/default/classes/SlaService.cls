@@ -56,7 +56,7 @@ public inherited sharing class SlaService {
         milestones.add(milestone);
       }
     }
-    insert milestones;
+    insert as system milestones;
   }
 
   public static void applyCaseChanges(
@@ -121,7 +121,7 @@ public inherited sharing class SlaService {
         record.SLA_Status__c = summary;
       }
     }
-    update milestonesToUpdate;
+    update as system milestonesToUpdate;
   }
 
   private static void applyChange(

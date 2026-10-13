@@ -39,14 +39,15 @@ flowchart LR
 | ------------------ | ------------------------------------------------------------------------------------------ | ----------- |
 | 1. Foundation      | SFDX project, conventions, data model, ADRs                                                | Done        |
 | 2. Domain          | Data model metadata, trigger framework, routing, SLA and escalation engines, 90%+ coverage | Done        |
-| 3. Interface       | Agent console in LWC with Jest tests                                                       | In progress |
-| 4. Integration     | Node.js + TypeScript portal, OAuth, Named Credentials, Platform Events                     | Planned     |
+| 3. Interface       | Agent console in LWC with Jest tests                                                       | Done        |
+| 4. Integration     | Node.js + TypeScript portal, OAuth, Apex REST API, Platform Events                         | In progress |
 | 5. DevOps          | GitHub Actions with scratch orgs, static analysis, coverage badges                         | Planned     |
 | 6. AI and showcase | AI case classification, final docs, demo video                                             | Planned     |
 
 ## Documentation
 
 - [Data model](docs/data-model.md): objects, fields, configuration and SLA targets
+- [Portal API](docs/api/portal-api.yaml): OpenAPI contract of the REST API used by the customer portal
 - [Architecture Decision Records](docs/adr/README.md): why each design choice was made
 - [Contributing](CONTRIBUTING.md): branches, commit convention and pull requests
 
