@@ -21,6 +21,7 @@ public inherited sharing class SlaMilestoneSelector {
         Paused_Minutes__c
       FROM SLA_Milestone__c
       WHERE Case__c IN :caseIds
+      WITH SYSTEM_MODE
       ORDER BY Case__c, Type__c
     ]) {
       if (!milestonesByCaseId.containsKey(milestone.Case__c)) {
@@ -58,6 +59,7 @@ public inherited sharing class SlaMilestoneSelector {
           AND At_Risk_At__c <= :asOf)
           OR (Status__c = :atRiskStatus
           AND Target_At__c < :asOf))
+        WITH SYSTEM_MODE
       ]
     );
   }

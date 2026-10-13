@@ -57,6 +57,7 @@ public without sharing class SlaEscalationBatch implements Database.Batchable<SO
       SELECT Id, CronJobDetail.Name
       FROM CronTrigger
       WHERE CronJobDetail.Name LIKE :namePattern
+      WITH SYSTEM_MODE
     ]) {
       existingJobIds.put(job.CronJobDetail.Name, job.Id);
     }

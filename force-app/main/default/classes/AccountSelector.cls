@@ -7,7 +7,12 @@ public inherited sharing class AccountSelector {
       return new Map<Id, Account>();
     }
     return new Map<Id, Account>(
-      [SELECT Id, Name, Support_Tier__c FROM Account WHERE Id IN :accountIds]
+      [
+        SELECT Id, Name, Support_Tier__c
+        FROM Account
+        WHERE Id IN :accountIds
+        WITH SYSTEM_MODE
+      ]
     );
   }
 

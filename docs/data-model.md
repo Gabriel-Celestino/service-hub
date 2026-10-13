@@ -110,9 +110,19 @@ Rules are evaluated by `Sort_Order__c`; the first match wins. An empty tier matc
 4. The case `SLA_Status__c` always reflects the worst status among its milestones.
 5. Each level is escalated once. Paused and completed milestones never escalate; a breach that is already history (for example, a late first response) shows in `SLA_Status__c` but does not move the case to Tier 2.
 
+## Integration (Phase 4)
+
+| Item                               | Purpose                                                                                                                   |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `Case.External_Id__c`              | Unique External Id: the case id in the portal, used for idempotent creation                                               |
+| `Escalation__c.Event_Published__c` | True when the `Case_Escalated__e` event was queued                                                                        |
+| `Integration_Log__c`               | One record per API call: direction, endpoint, status code, correlation id, payload, error                                 |
+| `Case_Escalated__e`                | Platform Event published after commit on every escalation: case id and number, external id, level, reason, correlation id |
+
+The REST contract is in [`docs/api/portal-api.yaml`](api/portal-api.yaml).
+
 ## Coming in later phases
 
-| Phase | Addition                                                                                             |
-| ----- | ---------------------------------------------------------------------------------------------------- |
-| 4     | `Case.External_Id__c`, `Escalation__c.Event_Published__c`, `Integration_Log__c`, `Case_Escalated__e` |
-| 6     | `Case.AI_Suggested_Category__c`, `Case.AI_Confidence__c`                                             |
+| Phase | Addition                                                 |
+| ----- | -------------------------------------------------------- |
+| 6     | `Case.AI_Suggested_Category__c`, `Case.AI_Confidence__c` |

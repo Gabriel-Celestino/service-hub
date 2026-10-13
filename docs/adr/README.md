@@ -12,5 +12,6 @@ Each significant design choice is recorded as an ADR: the context, the decision,
 | [0006](0006-layered-apex-architecture.md)                   | Use a layered Apex architecture with a lightweight trigger framework      | Accepted |
 | [0007](0007-scheduled-batch-for-escalation.md)              | Escalate with a scheduled batch job instead of time-based automation      | Accepted |
 | [0008](0008-user-mode-for-ui-system-mode-for-automation.md) | Enforce user permissions in UI controllers, run automation in system mode | Accepted |
+| [0009](0009-apex-rest-api-for-the-portal.md)                | Expose a purpose-built Apex REST API to the portal                        | Accepted |
 
 New ADRs start from [the template](template.md).

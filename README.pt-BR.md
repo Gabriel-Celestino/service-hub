@@ -39,14 +39,15 @@ flowchart LR
 | --------------- | --------------------------------------------------------------------------------------------------------- | ------------ |
 | 1. Fundação     | Projeto SFDX, convenções, modelo de dados, ADRs                                                           | Concluída    |
 | 2. Domínio      | Metadata do modelo, trigger framework, motores de roteamento, SLA e escalonamento, cobertura acima de 90% | Concluída    |
-| 3. Interface    | Console do agente em LWC com testes Jest                                                                  | Em andamento |
-| 4. Integração   | Portal em Node.js + TypeScript, OAuth, Named Credentials, Platform Events                                 | Planejada    |
+| 3. Interface    | Console do agente em LWC com testes Jest                                                                  | Concluída    |
+| 4. Integração   | Portal em Node.js + TypeScript, OAuth, API Apex REST, Platform Events                                     | Em andamento |
 | 5. DevOps       | GitHub Actions com scratch orgs, análise estática, badges de cobertura                                    | Planejada    |
 | 6. IA e vitrine | Classificação de chamados com IA, documentação final, vídeo-demo                                          | Planejada    |
 
 ## Documentação
 
 - [Modelo de dados](docs/data-model.md): objetos, campos, configuração e metas de SLA (em inglês)
+- [API do portal](docs/api/portal-api.yaml): contrato OpenAPI da API REST usada pelo portal do cliente (em inglês)
 - [Architecture Decision Records](docs/adr/README.md): por que cada decisão foi tomada (em inglês)
 - [Como contribuir](CONTRIBUTING.md): branches, padrão de commits e pull requests (em inglês)
 

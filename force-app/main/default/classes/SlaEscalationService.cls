@@ -7,6 +7,9 @@
  * case moves to the Tier 2 queue. A level is never escalated twice.
  */
 public inherited sharing class SlaEscalationService {
+  @TestVisible
+  private static List<Database.SaveResult> lastPublishResults = new List<Database.SaveResult>();
+
   public static void escalate(
     List<SLA_Milestone__c> dueMilestones,
     Datetime asOf
@@ -91,9 +94,11 @@ public inherited sharing class SlaEscalationService {
       }
     }
 
-    update milestonesToUpdate;
-    insert escalations;
-    update casesToUpdate;
+    publishEvents(escalations, casesById);
+
+    update as system milestonesToUpdate;
+    insert as system escalations;
+    update as system casesToUpdate;
   }
 
   /** Stored milestones of a case, with the ones refreshed in this run replacing their stale copies. */
@@ -113,5 +118,41 @@ public inherited sharing class SlaEscalationService {
       );
     }
     return result;
+  }
+
+  /**
+   * Publishes one Case_Escalated__e per escalation. Events are published
+   * after commit, so a rolled-back escalation never reaches the portal.
+   */
+  private static void publishEvents(
+    List<Escalation__c> escalations,
+    Map<Id, Case> casesById
+  ) {
+    if (escalations.isEmpty()) {
+      return;
+    }
+    List<Case_Escalated__e> events = new List<Case_Escalated__e>();
+    for (Escalation__c escalation : escalations) {
+      events.add(
+        CaseEscalatedEvents.build(escalation, casesById.get(escalation.Case__c))
+      );
+    }
+    List<Database.SaveResult> results = EventBus.publish(events);
+    lastPublishResults = results;
+    List<Integration_Log__c> failures = new List<Integration_Log__c>();
+    for (Integer i = 0; i < escalations.size(); i++) {
+      escalations[i].Event_Published__c = results[i].isSuccess();
+      if (!results[i].isSuccess()) {
+        failures.add(
+          IntegrationLogger.outbound(
+            'EventBus.publish Case_Escalated__e',
+            events[i].Correlation_Id__c,
+            escalations[i].Case__c,
+            String.valueOf(results[i].getErrors())
+          )
+        );
+      }
+    }
+    IntegrationLogger.save(failures);
   }
 }

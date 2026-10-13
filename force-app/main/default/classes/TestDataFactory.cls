@@ -99,4 +99,46 @@ public class TestDataFactory {
     );
     return agent;
   }
+
+  /**
+   * The customer portal's integration user: Minimum Access profile plus the
+   * Service_Hub_Integration permission set, so tests prove that the
+   * permission set alone is enough.
+   */
+  public static User createIntegrationUser() {
+    sequence++;
+    Profile minimumAccess = [
+      SELECT Id
+      FROM Profile
+      WHERE Name = 'Minimum Access - Salesforce'
+      LIMIT 1
+    ];
+    User integration = new User(
+      Alias = 'portal' + Math.mod(sequence, 10),
+      Email = 'portal@servicehub.test',
+      EmailEncodingKey = 'UTF-8',
+      LastName = 'Portal Integration ' + sequence,
+      LanguageLocaleKey = 'en_US',
+      LocaleSidKey = 'en_US',
+      ProfileId = minimumAccess.Id,
+      TimeZoneSidKey = 'America/Sao_Paulo',
+      Username = 'portal' +
+        sequence +
+        '.' +
+        System.now().getTime() +
+        '@servicehub.test'
+    );
+    insert integration;
+    PermissionSet permissions = [
+      SELECT Id
+      FROM PermissionSet
+      WHERE Name = 'Service_Hub_Integration'
+      LIMIT 1
+    ];
+    insert new PermissionSetAssignment(
+      AssigneeId = integration.Id,
+      PermissionSetId = permissions.Id
+    );
+    return integration;
+  }
 }
