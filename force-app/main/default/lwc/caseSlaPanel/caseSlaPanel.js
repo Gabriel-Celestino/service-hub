@@ -5,6 +5,10 @@ import getCaseSla from "@salesforce/apex/CaseSlaController.getCaseSla";
 import CASE_LAST_MODIFIED from "@salesforce/schema/Case.LastModifiedDate";
 import { statusModifier } from "c/slaUtils";
 
+/** "Tier2_Escalations" -> "Tier 2 Escalations" */
+const queueLabel = (developerName) =>
+  developerName.replace(/_/g, " ").replace(/([a-z])(\d)/gi, "$1 $2");
+
 /**
  * SLA panel for the Case record page: live countdown per milestone and the
  * escalation trail. Refreshes itself whenever the case is saved.
@@ -68,9 +72,12 @@ export default class CaseSlaPanel extends LightningElement {
     return (this.sla?.escalations ?? []).map((escalation) => ({
       ...escalation,
       title: `Level ${escalation.level} · ${escalation.reason}`,
-      queueLabel: escalation.targetQueue
-        ? `Moved to ${escalation.targetQueue}`
-        : "Owner unchanged"
+      detail: escalation.targetQueue
+        ? `· Moved to ${queueLabel(escalation.targetQueue)} ·`
+        : "· Owner unchanged ·",
+      createdAt: escalation.createdDate
+        ? Date.parse(escalation.createdDate)
+        : undefined
     }));
   }
 

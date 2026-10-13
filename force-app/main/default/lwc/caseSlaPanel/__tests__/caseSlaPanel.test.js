@@ -77,6 +77,29 @@ describe("c-case-sla-panel", () => {
     expect(escalations[0].textContent).toContain("Owner unchanged");
   });
 
+  it("names the destination queue and passes a timestamp to the relative date", async () => {
+    const element = render();
+    getCaseSla.emit({
+      ...mockSla,
+      escalations: [
+        {
+          id: "a02000000000002AAA",
+          name: "ESC-000002",
+          level: 2,
+          reason: "SLA Breached",
+          targetQueue: "Tier2_Escalations",
+          createdDate: "2026-01-05T12:31:00.000Z"
+        }
+      ]
+    });
+    await flush();
+
+    const escalation = all(element, "escalation")[0];
+    expect(escalation.textContent).toContain("Moved to Tier 2 Escalations");
+    const relative = escalation.querySelector("lightning-relative-date-time");
+    expect(relative.value).toBe(Date.parse("2026-01-05T12:31:00.000Z"));
+  });
+
   it("shows empty states when there is nothing to show", async () => {
     const element = render();
     getCaseSla.emit({
